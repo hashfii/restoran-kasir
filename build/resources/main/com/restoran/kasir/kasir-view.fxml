@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.restoran.kasir.controller.KasirController"
+            styleClass="root-pane">
+
+    <!-- ==================== HEADER ==================== -->
+    <top>
+        <VBox styleClass="header-box" alignment="CENTER">
+            <padding><Insets top="18" bottom="18" left="30" right="30"/></padding>
+            <Label text="RESTORAN NUSANTARA" styleClass="header-title"/>
+            <Label text="Sistem Kasir Digital" styleClass="header-subtitle"/>
+        </VBox>
+    </top>
+
+    <!-- ==================== KONTEN UTAMA ==================== -->
+    <center>
+        <HBox spacing="16" styleClass="main-content">
+            <padding><Insets top="16" bottom="16" left="20" right="20"/></padding>
+
+            <!-- ===== PANEL KIRI: DAFTAR MENU ===== -->
+            <VBox spacing="12" styleClass="panel" HBox.hgrow="ALWAYS" minWidth="340" maxWidth="400">
+                <padding><Insets top="16" bottom="16" left="16" right="16"/></padding>
+
+                <Label text="Daftar Menu" styleClass="panel-title"/>
+
+                <!-- Filter Kategori -->
+                <HBox spacing="8" alignment="CENTER_LEFT" styleClass="filter-box">
+                    <ToggleButton fx:id="btnFilterSemua" text="Semua" selected="true" styleClass="filter-btn"/>
+                    <ToggleButton fx:id="btnFilterMakanan" text="Makanan" styleClass="filter-btn"/>
+                    <ToggleButton fx:id="btnFilterMinuman" text="Minuman" styleClass="filter-btn"/>
+                </HBox>
+
+                <!-- Tabel Menu -->
+                <TableView fx:id="menuTable" VBox.vgrow="ALWAYS" styleClass="custom-table">
+                    <columns>
+                        <TableColumn fx:id="colMenuNama" text="Nama Menu" minWidth="140"/>
+                        <TableColumn fx:id="colMenuHarga" text="Harga" minWidth="100"/>
+                        <TableColumn fx:id="colMenuKategori" text="Kategori" minWidth="80"/>
+                    </columns>
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+                </TableView>
+            </VBox>
+
+            <!-- ===== PANEL TENGAH: PESANAN ===== -->
+            <VBox spacing="12" styleClass="panel" HBox.hgrow="ALWAYS" minWidth="340" maxWidth="420">
+                <padding><Insets top="16" bottom="16" left="16" right="16"/></padding>
+
+                <Label text="Pesanan" styleClass="panel-title"/>
+
+                <!-- Input Pesanan -->
+                <VBox spacing="10" styleClass="input-section">
+                    <Label text="Pilih Menu:" styleClass="input-label"/>
+                    <ComboBox fx:id="menuCombo" maxWidth="Infinity" promptText="-- Pilih Menu --" styleClass="custom-combo"/>
+
+                    <HBox spacing="12" alignment="CENTER_LEFT">
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <Label text="Jumlah:" styleClass="input-label"/>
+                            <Spinner fx:id="qtySpinner" maxWidth="Infinity" styleClass="custom-spinner"/>
+                        </VBox>
+                        <VBox spacing="4">
+                            <Label text=" " styleClass="input-label"/>
+                            <Button fx:id="btnTambah" text="+ Tambah" onAction="#onTambahPesanan"
+                                    styleClass="btn-primary" maxHeight="Infinity"/>
+                        </VBox>
+                    </HBox>
+
+                    <Label text="Maks. 4 menu berbeda per transaksi" styleClass="info-label"/>
+                </VBox>
+
+                <!-- Tabel Pesanan -->
+                <TableView fx:id="orderTable" VBox.vgrow="ALWAYS" styleClass="custom-table">
+                    <columns>
+                        <TableColumn fx:id="colOrderNama" text="Menu" minWidth="120"/>
+                        <TableColumn fx:id="colOrderQty" text="Qty" minWidth="45" maxWidth="60"/>
+                        <TableColumn fx:id="colOrderHarga" text="Harga" minWidth="90"/>
+                        <TableColumn fx:id="colOrderSubtotal" text="Subtotal" minWidth="100"/>
+                    </columns>
+                    <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/></columnResizePolicy>
+                </TableView>
+
+                <Button fx:id="btnHapus" text="Hapus Pesanan Terpilih" onAction="#onHapusPesanan"
+                        styleClass="btn-danger" maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- ===== PANEL KANAN: PEMBAYARAN & STRUK ===== -->
+            <VBox spacing="12" styleClass="panel" HBox.hgrow="ALWAYS" minWidth="340" maxWidth="420">
+                <padding><Insets top="16" bottom="16" left="16" right="16"/></padding>
+
+                <Label text="Pembayaran" styleClass="panel-title"/>
+
+                <!-- Ringkasan Biaya -->
+                <VBox spacing="8" styleClass="cost-summary">
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Subtotal" styleClass="cost-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Label fx:id="lblSubtotal" text="Rp 0" styleClass="cost-value"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Pajak (10%)" styleClass="cost-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Label fx:id="lblTax" text="Rp 0" styleClass="cost-value"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Biaya Layanan" styleClass="cost-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Label fx:id="lblService" text="Rp 0" styleClass="cost-value"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Diskon (10%)" styleClass="cost-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Label fx:id="lblDiscount" text="-" styleClass="cost-value-discount"/>
+                    </HBox>
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="Promo B1G1" styleClass="cost-label" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Label fx:id="lblPromo" text="-" styleClass="cost-value-discount"/>
+                    </HBox>
+
+                    <Separator styleClass="cost-separator"/>
+
+                    <HBox alignment="CENTER_LEFT">
+                        <Label text="TOTAL BAYAR" styleClass="total-label-text" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+                        <Label fx:id="lblTotal" text="Rp 0" styleClass="total-value"/>
+                    </HBox>
+                </VBox>
+
+                <!-- Struk Digital -->
+                <Label text="Struk Digital" styleClass="panel-subtitle"/>
+                <TextArea fx:id="receiptArea" VBox.vgrow="ALWAYS" editable="false"
+                          promptText="Struk akan muncul di sini setelah menekan 'Cetak Struk'..."
+                          styleClass="receipt-area" wrapText="true"/>
+            </VBox>
+        </HBox>
+    </center>
+
+    <!-- ==================== FOOTER: TOMBOL AKSI ==================== -->
+    <bottom>
+        <HBox spacing="16" alignment="CENTER" styleClass="footer-box">
+            <padding><Insets top="14" bottom="18" left="30" right="30"/></padding>
+            <Button fx:id="btnHitung" text="Hitung Total" onAction="#onHitungTotal"
+                    styleClass="btn-action" prefWidth="200" prefHeight="44"/>
+            <Button fx:id="btnCetak" text="Cetak Struk" onAction="#onCetakStruk"
+                    styleClass="btn-action-secondary" prefWidth="200" prefHeight="44"/>
+            <Button fx:id="btnBaru" text="Transaksi Baru" onAction="#onTransaksiBaru"
+                    styleClass="btn-action-reset" prefWidth="200" prefHeight="44"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

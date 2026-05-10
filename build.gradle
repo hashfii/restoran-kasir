@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'com.restoran.kasir'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+// Deteksi platform untuk dependensi JavaFX
+String jfxPlatform
+String osName = System.getProperty('os.name').toLowerCase()
+if (osName.contains('win')) {
+    jfxPlatform = 'win'
+} else if (osName.contains('mac')) {
+    jfxPlatform = 'mac'
+} else {
+    jfxPlatform = 'linux'
+}
+
+def jfxVersion = '24.0.1'
+
+dependencies {
+    implementation "org.openjfx:javafx-base:${jfxVersion}:${jfxPlatform}"
+    implementation "org.openjfx:javafx-controls:${jfxVersion}:${jfxPlatform}"
+    implementation "org.openjfx:javafx-fxml:${jfxVersion}:${jfxPlatform}"
+    implementation "org.openjfx:javafx-graphics:${jfxVersion}:${jfxPlatform}"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+}
+
+application {
+    mainModule = 'com.restoran.kasir'
+    mainClass = 'com.restoran.kasir.Main'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+run {
+    jvmArgs = [
+        '--module-path', classpath.asPath,
+        '--add-modules', 'javafx.controls,javafx.fxml'
+    ]
+}
